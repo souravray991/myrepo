@@ -1,0 +1,61 @@
+ - name: Open a SNOW Incident
+   block:
+     - name: Create an Incident
+       snow_record: 
+         username: 'admin'
+         password: 'wa6PQjVr%=I4'
+         instance: 'dev111689'
+         state: present
+         table: incident
+         data: 
+           short_description: 'Test Incident5 Only'
+           severity: 3
+           priority: 2
+           caller_id: 'System Administrator'
+           comment: "Any ..."
+       register: snow_var
+       delegate_to: localhost
+
+     - name: Output of Incident Number
+       debug:
+         var: snow_var.record.number
+
+     - set_fact:
+         incident_num: snow_var.record.number
+
+   when: open_ticket == true
+#  - name: Sleep for 30 seconds and continue with play
+#    wait_for:
+#      timeout: 30
+#    delegate_to: localhost
+ - name: Close Service Now Ticket
+   block:
+     - name: Update SNOW and Mark as Resolved (stage 6)
+       snow_record:
+         username: 'admin'
+         password: 'wa6PQjVr%=I4'
+         instance: 'dev111689'
+         state: present
+         table: incident 
+         number: "{{snow_var.record.number}}"
+         data:
+           work_notes: "Stage 6 (Comment)"
+           caller_id: 'System Administrator'
+           state: 6 
+       delegate_to: localhost
+
+     - name: Update ServiceNow and Mark as Resolved (stage 7)
+       snow_record:
+         username: 'admin'
+         password: 'wa6PQjVr%=I4'
+         instance: 'dev111689'
+         state: present
+         table: incident
+         number: "{{snow_var.record.number}}"
+         data:
+           work_notes: "Stage 6 (Comment)"
+           caller_id: 'System Adminstrator' 
+           state: 7
+       delegate_to: localhost
+
+   when: close_ticket == true 

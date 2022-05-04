@@ -1,0 +1,4 @@
+---
+# vars file for incident
+open_ticket : true
+close_ticket : true

@@ -1,0 +1,6 @@
+---
+- name: Raise Ticket to SNOW
+  hosts: localhost
+  gather_facts: false
+  roles:
+   - incident
