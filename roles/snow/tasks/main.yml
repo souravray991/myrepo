@@ -1,0 +1,5 @@
+---
+# tasks file for snow
+ - name: Install pysnow
+   pip:
+     name: pysnow
